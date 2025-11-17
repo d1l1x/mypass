@@ -54,6 +54,10 @@ For a template see the [.env.template](https://github.com/dani-garcia/vaultwarde
 2. Disable signups by setting `SIGNUPS_ALLOWED=false`
 3. Disable invitations by setting `INVITATIONS_ALLOWED=false`
 
+### 4️⃣ Set up users
+
+If you followed the above recommendations, e.g. `SIGNUPS_ALLOWD=false` and `INVITATIONS_ALLOWED=false`, users have to be explicitly invited by the admin via `https://vaultwarden.example.tld/admin`. If mailing has been disabled, invited users can use `https://vaultwarden.example.tld/#/signup` to signup. Otherwise they use the link sent via mail.
+
 ## 🚀 Usage
 
 0. Run `docker compose up -d` 
