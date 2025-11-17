@@ -2,9 +2,10 @@ services:
   vaultwarden:
     image: vaultwarden/server:1.34.3
     container_name: vaultwarden
-    user: 1000:1000
+    user: 501:501
+    userns_mode: "host"
     volumes:
-      - vaultwarden_data:/data
+      - ./vw-data:/data
     networks: [internal]
     restart: unless-stopped
     env_file:
@@ -23,6 +24,3 @@ services:
 
 networks:
   internal:
-
-volumes:
-  vaultwarden_data:
