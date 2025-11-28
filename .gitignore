@@ -2,5 +2,4 @@ secrets/**
 .env
 
 vw-data
-etc/**
 certbot/etc/letsencrypt/**
