@@ -1,5 +1,5 @@
 secrets/**
-.env
+.env*
 
 vw-data
 etc/letsencrypt/accounts/**
