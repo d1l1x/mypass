@@ -2,4 +2,13 @@ secrets/**
 .env
 
 vw-data
-certbot/etc/letsencrypt/**
+etc/letsencrypt/accounts/**
+etc/letsencrypt/archive/**
+etc/letsencrypt/live/**
+etc/letsencrypt/renewal/**
+etc/letsencrypt/renewal-hooks/**
+
+
+etc/letsencrypt/ssl-dhparams.pem
+
+etc/letsencrypt/options-ssl-nginx.conf
