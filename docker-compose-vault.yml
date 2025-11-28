@@ -9,17 +9,21 @@ services:
     networks: [internal]
     restart: unless-stopped
     env_file:
-      - .env
+      - .env_vault
 
   nginx:
     image: nginx:1.29-alpine
+    container_name: nginx_vault
+    restart: unless-stopped
     depends_on: [vaultwarden]
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./secrets/nginx/certs/127.0.0.1+1.pem:/etc/nginx/certs/127.0.0.1+1.pem:ro
-      - ./secrets/nginx/certs/127.0.0.1+1-key.pem:/etc/nginx/certs/127.0.0.1+1-key.pem:ro
+      - ./vault/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./etc/letsencrypt:/etc/letsencrypt:ro
+      - ./certbot/data:/var/www/certbot
     ports:
       - "9443:9443"
+    env_file:
+      - .env_certbot
     networks: [internal]
 
 networks:
