@@ -2,7 +2,7 @@ services:
   nginx:
     container_name: nginx
     image: nginx:latest
-    env_file: .env
+    env_file: .env_certbot
     ports:
       - 80:80
     volumes:
@@ -12,7 +12,7 @@ services:
   certbot:
     container_name: certbot
     image: certbot/certbot:latest
-    env_file: .env
+    env_file: .env_certbot
     depends_on:
       - nginx
     command: >-

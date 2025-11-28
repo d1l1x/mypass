@@ -12,8 +12,8 @@ fi
 DOMAIN=$1
 EMAIL=$2
 
-echo DOMAIN=${DOMAIN} > .env
-echo EMAIL=${EMAIL} >> .env
+echo DOMAIN=${DOMAIN} > .env_certbot
+echo EMAIL=${EMAIL} >> .env_certbot
 
 # Phase 1
 docker compose -f docker-compose-cerbot.yml up -d nginx
