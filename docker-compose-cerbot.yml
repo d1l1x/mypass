@@ -1,6 +1,6 @@
 services:
   nginx:
-    container_name: nginx
+    container_name: nginx_certbot
     image: nginx:latest
     env_file: .env_certbot
     ports:
