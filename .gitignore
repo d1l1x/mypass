@@ -3,4 +3,4 @@ secrets/**
 
 vw-data
 etc/**
-cerbot/**
+certbot/etc/letsencrypt/**
