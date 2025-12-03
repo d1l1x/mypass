@@ -12,3 +12,5 @@ etc/letsencrypt/renewal-hooks/**
 etc/letsencrypt/ssl-dhparams.pem
 
 etc/letsencrypt/options-ssl-nginx.conf
+
+geoipupdate_data/**

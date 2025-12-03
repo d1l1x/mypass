@@ -1,0 +1,28 @@
+geoip2 /var/lib/GeoIP/GeoLite2-Country.mmdb {
+    $geoip2_data_country_iso_code country iso_code;
+}
+
+geoip2 /var/lib/GeoIP/GeoLite2-City.mmdb {
+    $geoip2_data_city_name city names en;
+    $geoip2_data_state_name subdivisions 0 names en;
+    $geoip2_data_location_latitude location latitude;
+    $geoip2_data_location_longitude location longitude;
+    $geoip2_data_location_time_zone location time_zone;
+}
+
+geo $is_internal {
+    default 0;
+    $INTERNAL_IP 1;
+}
+
+map $geoip2_data_country_iso_code $is_allowed_country {
+    default 0;
+    "DE" 1;
+}
+
+map "$is_internal:$is_allowed_country" $block_request {
+    default 1;  # block by default
+    "1:0" 0;    # internal → allow
+    "1:1" 0;    # internal + allowed → allow
+    "0:1" 0;    # external + allowed country → allow
+}

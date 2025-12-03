@@ -6,25 +6,83 @@ services:
     userns_mode: "host"
     volumes:
       - ./vw-data:/data
-    networks: [internal]
+    networks:
+      - internal
     restart: unless-stopped
     env_file:
       - .env_vault
 
   nginx:
-    image: nginx:1.29-alpine
+    image: nginx_geoip2:latest
+    build:
+      context: nginx
+      dockerfile: Dockerfile
     container_name: nginx_vault
     restart: unless-stopped
-    depends_on: [vaultwarden]
+    depends_on:
+      - vaultwarden
+      - geoipupdate
     volumes:
       - ./etc/nginx/templates:/etc/nginx/templates:ro
+      - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./geoipupdate_data/GeoLite2-Country.mmdb:/var/lib/GeoIP/GeoLite2-Country.mmdb
+      - ./geoipupdate_data/GeoLite2-City.mmdb:/var/lib/GeoIP/GeoLite2-City.mmdb
+      #- ./geoipupdate_data/GeoLite2-ASN.mmdb:/var/lib/GeoIP/GeoLite2-ASN.mmdb
       - ./etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/log/nginx:/var/log/nginx
       - ./certbot/data:/var/www/certbot
     ports:
       - "9443:9443"
     env_file:
       - .env_certbot
-    networks: [internal]
+    networks:
+      - internal
+      - monitoring
+
+  nginx_exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx_exporter
+    command: --nginx.scrape-uri=http://nginx:8080/stub_status
+    ports:
+      - "127.0.0.1:9113:9113"
+    depends_on:
+      - nginx
+    networks: [monitoring]
+
+  geoipupdate:
+    container_name: geoipupdate
+    image: ghcr.io/maxmind/geoipupdate
+    restart: unless-stopped
+    environment:
+      - 'GEOIPUPDATE_ACCOUNT_ID_FILE=/run/secrets/GEOIPUPDATE_ACCOUNT_ID'
+      - 'GEOIPUPDATE_LICENSE_KEY_FILE=/run/secrets/GEOIPUPDATE_LICENSE_KEY'
+      - 'GEOIPUPDATE_EDITION_IDS=GeoLite2-ASN GeoLite2-City GeoLite2-Country'
+      - GEOIPUPDATE_FREQUENCY=72
+    networks:
+      - geoipupdate
+    volumes:
+      - './geoipupdate_data:/usr/share/GeoIP'
+    secrets:
+      - GEOIPUPDATE_ACCOUNT_ID
+      - GEOIPUPDATE_LICENSE_KEY
+
+secrets:
+  GEOIPUPDATE_ACCOUNT_ID:
+    file: ./secrets/GEOIPUPDATE_ACCOUNT_ID.txt
+  GEOIPUPDATE_LICENSE_KEY:
+    file: ./secrets/GEOIPUPDATE_LICENSE_KEY.txt
 
 networks:
   internal:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+  monitoring:
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
+  geoipupdate:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
