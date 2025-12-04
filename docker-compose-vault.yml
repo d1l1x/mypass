@@ -27,7 +27,7 @@ services:
       - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./geoipupdate_data/GeoLite2-Country.mmdb:/var/lib/GeoIP/GeoLite2-Country.mmdb
       - ./geoipupdate_data/GeoLite2-City.mmdb:/var/lib/GeoIP/GeoLite2-City.mmdb
-      #- ./geoipupdate_data/GeoLite2-ASN.mmdb:/var/lib/GeoIP/GeoLite2-ASN.mmdb
+      - ./geoipupdate_data/GeoLite2-ASN.mmdb:/var/lib/GeoIP/GeoLite2-ASN.mmdb
       - ./etc/letsencrypt:/etc/letsencrypt:ro
       - /var/log/nginx:/var/log/nginx
       - ./certbot/data:/var/www/certbot

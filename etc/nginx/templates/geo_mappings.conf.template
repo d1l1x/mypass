@@ -1,13 +1,21 @@
 geoip2 /var/lib/GeoIP/GeoLite2-Country.mmdb {
+    auto_reload 5m;
     $geoip2_data_country_iso_code country iso_code;
 }
 
 geoip2 /var/lib/GeoIP/GeoLite2-City.mmdb {
+    auto_reload 5m;
     $geoip2_data_city_name city names en;
     $geoip2_data_state_name subdivisions 0 names en;
     $geoip2_data_location_latitude location latitude;
     $geoip2_data_location_longitude location longitude;
     $geoip2_data_location_time_zone location time_zone;
+}
+
+geoip2 /var/lib/GeoIP/GeoLite2-ASN.mmdb {
+    auto_reload 5m;
+    $geoip2_data_asn_number autonomous_system_number;
+    $geoip2_data_asn_org autonomous_system_organization;
 }
 
 geo $is_internal {
